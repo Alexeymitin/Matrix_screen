@@ -1,68 +1,82 @@
 document.addEventListener("DOMContentLoaded", () => {
-	const CHARACTERS =
-    "101111001001111111100011110111100100111111110001111011110010011111111000111";
+    const CHARACTERS =
+        "101111001001111111100011110111100100111111110001111011110010011111111000111";
 
-class Column {
-    constructor(x, fontSize, canvasHeight, context) {
-        this.x = x;
-        this.y = 0;
-        this.fontSize = fontSize;
-        this.canvasHeight = canvasHeight;
-        this.context = context;
-    }
-
-    drawSymbol() {
-        if (this.y === 0 && Math.random() < 0.98) {
-            return;
-        }
-
-        const characterIndex = Math.floor(Math.random() * CHARACTERS.length);
-        const symbol = CHARACTERS[characterIndex];
-
-        this.context.fillText(symbol, this.x, this.y);
-
-        if (this.y > this.canvasHeight) {
+    class Column {
+        constructor(x, fontSize, canvasHeight, context) {
+            this.x = x;
             this.y = 0;
-        } else {
-            this.y += this.fontSize;
+            this.fontSize = fontSize;
+            this.canvasHeight = canvasHeight;
+            this.context = context;
+        }
+
+        drawSymbol() {
+            if (this.y === 0 && Math.random() < 0.98) {
+                return;
+            }
+
+            const characterIndex = Math.floor(
+                Math.random() * CHARACTERS.length
+            );
+            const symbol = CHARACTERS[characterIndex];
+
+            this.context.fillText(symbol, this.x, this.y);
+
+            if (this.y > this.canvasHeight) {
+                this.y = 0;
+            } else {
+                this.y += this.fontSize;
+            }
         }
     }
-}
 
+    const canvas = document.querySelector("#matrix"),
+        context = canvas.getContext("2d");
 
+    function resizeCanvasToDisplaySize(canvas) {
+        const displayWidth = canvas.clientWidth;
+        const displayHeight = canvas.clientHeight;
 
-const canvas = document.querySelector("#matrix"),
-    context = canvas.getContext("2d");
+        const needResize =
+            canvas.width !== displayWidth || canvas.height !== displayHeight;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+        if (needResize) {
+            canvas.width = displayWidth;
+            canvas.height = displayHeight;
+        }
 
-const FONT_SIZE = 16,
-    columns = [],
-    columnsCount = canvas.width / FONT_SIZE;
+        return needResize;
+    }
 
-for (let i = 0; i < columnsCount; i++) {
-    columns.push(new Column(i * FONT_SIZE, FONT_SIZE, canvas.height, context));
-}
+    resizeCanvasToDisplaySize(context.canvas);
+    // canvas.width = window.innerWidth;
+    // canvas.height = window.innerHeight;
 
-context.font = `700 ${FONT_SIZE}px Courier Prime`;
+    const FONT_SIZE = 16,
+        columns = [],
+        columnsCount = canvas.width / FONT_SIZE;
 
-const column = new Column(100, FONT_SIZE, canvas.height, context);
+    for (let i = 0; i < columnsCount; i++) {
+        columns.push(
+            new Column(i * FONT_SIZE, FONT_SIZE, canvas.height, context)
+        );
+    }
 
-function animate() {
-    context.fillStyle = "rgba(0, 0, 0, 0.05)";
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.font = `700 ${FONT_SIZE}px Courier Prime`;
 
-    context.fillStyle = "green";
+    function animate() {
+        context.fillStyle = "rgba(0, 0, 0, 0.05)";
+        context.fillRect(0, 0, canvas.width, canvas.height);
 
-    columns.forEach((column) => column.drawSymbol());
+        context.fillStyle = "green";
 
-    setTimeout(() => {
-        requestAnimationFrame(animate);
-    }, 50);
-}
+        columns.forEach((column) => column.drawSymbol());
 
-animate();
+        setTimeout(() => {
+            requestAnimationFrame(animate);
+        }, 50);
+    }
 
-})
-
+    animate();
+});
