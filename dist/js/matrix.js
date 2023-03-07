@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
             this.context = context;
         }
 
+
         drawSymbol() {
             if (this.y === 0 && Math.random() < 0.98) {
                 return;
@@ -34,24 +35,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.querySelector("#matrix"),
         context = canvas.getContext("2d");
 
-    function resizeCanvasToDisplaySize(canvas) {
-        const displayWidth = canvas.clientWidth;
-        const displayHeight = canvas.clientHeight;
+    // function resizeCanvasToDisplaySize(canvas) {
+    //     const displayWidth = canvas.clientWidth;
+    //     const displayHeight = canvas.clientHeight;
 
-        const needResize =
-            canvas.width !== displayWidth || canvas.height !== displayHeight;
+    //     const needResize =
+    //         canvas.width !== displayWidth || canvas.height !== displayHeight;
 
-        if (needResize) {
-            canvas.width = displayWidth;
-            canvas.height = displayHeight;
-        }
+    //     if (needResize) {
+    //         canvas.width = displayWidth;
+    //         canvas.height = displayHeight;
+    //     }
 
-        return needResize;
-    }
+    //     return needResize;
+    // }
 
-    resizeCanvasToDisplaySize(context.canvas);
-    // canvas.width = window.innerWidth;
-    // canvas.height = window.innerHeight;
+    // resizeCanvasToDisplaySize(context.canvas);
+
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     const FONT_SIZE = 16,
         columns = [],
@@ -66,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     context.font = `700 ${FONT_SIZE}px Courier Prime`;
 
     function animate() {
+
         context.fillStyle = "rgba(0, 0, 0, 0.05)";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
